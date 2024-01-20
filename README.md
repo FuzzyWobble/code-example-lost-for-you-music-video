@@ -2,7 +2,7 @@
  
 #### Threejs + JavaScript
 
-##### Interactive 3D music video for emerging band GIFT.  
+##### Interactive 3D music video in the web with light interactions. Created for the emerging New York band, Gift.  
 
 ##### LIVE DEMO: https://lostforyou.com/
 
