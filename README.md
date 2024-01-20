@@ -10,6 +10,8 @@
 
 
 
-![alt text]([https://github.com/FuzzyWobble/code-example-realtime-cutouts-in-webxr/blob/main/assets/screencapture/screen2.jpg](https://github.com/FuzzyWobble/code-example-lost-for-you-music-video/blob/main/assets/screengrab/gift1280.jpg))
+![alt text](https://github.com/FuzzyWobble/code-example-lost-for-you-music-video/blob/main/assets/screengrab/gift1280.jpg)
+
 <br />
+
 ![alt text]([https://github.com/FuzzyWobble/code-example-realtime-cutouts-in-webxr/blob/main/assets/screencapture/demoGifBean.gif](https://github.com/FuzzyWobble/code-example-lost-for-you-music-video/blob/main/assets/screengrab/lostforyou.gif))
