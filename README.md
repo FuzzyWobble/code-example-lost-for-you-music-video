@@ -14,4 +14,5 @@
 
 <br />
 
-![alt text]([https://github.com/FuzzyWobble/code-example-realtime-cutouts-in-webxr/blob/main/assets/screencapture/demoGifBean.gif](https://github.com/FuzzyWobble/code-example-lost-for-you-music-video/blob/main/assets/screengrab/lostforyou.gif))
+![alt text](https://github.com/FuzzyWobble/code-example-realtime-cutouts-in-webxr/blob/main/assets/screencapture/demoGifBean.gif)
+
