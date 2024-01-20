@@ -681,23 +681,25 @@ class LostForYou{
     seek(_pct){
 
         this.song.seek(_pct*this.song.duration());
-        this.timeOfClick = Date.now();
-        this.timeWhereClicked = _pct*this.song.duration()*1000;
+        
+        this.timeOfClick =          Date.now();
+        this.timeWhereClicked =     _pct*this.song.duration()*1000;
 
-        if(_G.DEBUG)console.log("CLICKED TIME "+this.timeWhereClicked+" OF "+this.song.duration());
+        if(_G.DEBUG)console.log("CLICKED TIME "+this.timeWhereClicked+" OF "+(this.song.duration()*1000));
 
         for(var i=0;i<_G.TIMELINE.length;i++){
             if(_G.TIMELINE[i].time>this.timeWhereClicked){
                 this.timelineIndex = i-1;
-                if(_G.DEBUG)console.log("CLICK FOR TIMELINE INDEX: "+(i-1));
+                if(_G.DEBUG)console.log("CLICK FOR TIMELINE INDEX: "+(i-1)+"/"+_G.TIMELINE.length);
                 break;
             }
         }
+
         for(var i=0;i<_G.LYRICS.length;i++){
             if(_G.LYRICS[i].time>this.timeWhereClicked){
                 this.lyricsIndex = i-1;
                 this.lyricListNum = _G.LYRICS[i-1].idx
-                if(_G.DEBUG)console.log("CLICK FOR LYRICS INDEX: "+(i-1));
+                if(_G.DEBUG)console.log("CLICK FOR LYRICS INDEX: "+(i-1)+"/"+_G.LYRICS.length);
                 break;
             }
         }
@@ -787,18 +789,20 @@ class LostForYou{
         if(!this.playing)return; 
         //----------------------------------
         //----------------------------------
-        this.time = Date.now() - this.startTime;
-        if(this.timeOfClick){ //seek was clicked
+        
+        if(this.timeOfClick){
             this.time = this.timeWhereClicked + (Date.now()-this.timeOfClick);
-            this.timeOfClick = undefined;
+        }else{
+            this.time = Date.now()-this.startTime;
         }
+
 
         //----------------------------------
         //band
         if(this.timelineIndex<_G.TIMELINE.length-1){
             if(this.time>_G.TIMELINE[this.timelineIndex+1].time){
                 this.timelineIndex++;
-                if(_G.DEBUG)console.log("BAND UPDATE INDEX "+this.timelineIndex+" AT TIME "+this.time);
+                //if(_G.DEBUG)console.log("BAND UPDATE INDEX "+this.timelineIndex+" AT TIME "+this.time);
                 this.updateTimelineAndLyrics();
             }
         }
@@ -806,9 +810,10 @@ class LostForYou{
         //----------------------------------
         //lyrics 
         if(this.lyricsIndex<_G.LYRICS.length-1){
+
             if(this.time>_G.LYRICS[this.lyricsIndex+1].time){
                 this.lyricsIndex++;
-                if(_G.DEBUG)console.log("LYRICS UPDATE INDEX "+this.lyricsIndex+" AT TIME "+this.time);
+                //if(_G.DEBUG)console.log("LYRICS UPDATE INDEX "+this.lyricsIndex+" AT TIME "+this.time);
                 this.updateTimelineAndLyrics();
             }
         }
@@ -907,7 +912,7 @@ class LostForYou{
 
         //----------------------------------
         //fov modulate
-        this.three.camera.fov = this.three.settings.camera.fov + (Math.cos(this.updateCounter*0.018)*10);
+        this.three.camera.fov = this.three.settings.camera.fov + (Math.cos(this.updateCounter*0.018)*12);
         var init_depht_s    = Math.tan(this.three.settings.camera.fov/2.0 * Math.PI/180.0) * 2.0;
         var current_depht_s = Math.tan(this.three.camera.fov/2.0 * Math.PI/180.0) * 2.0;
         this.three.camera.updateProjectionMatrix();
