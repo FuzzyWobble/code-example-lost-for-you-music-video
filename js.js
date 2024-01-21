@@ -40,6 +40,8 @@ class LostForYou{
         this.clock =                new THREE.Clock();
         this.delta =                this.clock.getDelta();
         this.raycaster =            new THREE.Raycaster();
+        this.spritesToLoad = 0;
+        this.loadedSpriteCount = 0;
         
         this.settings = { //dat-gui
             tube:{
@@ -129,16 +131,22 @@ class LostForYou{
         this.setupGui();
         this.loadSprites(()=>{ //callback when promise-all complete
 
-            document.getElementById('loading').style.display =                                  'none';
-            document.getElementById('clicktostart').style.display =                             'block';
-            if(_G.LFY.isIos)document.getElementById('unmute_reminder_ios').style.display =      'none';
-            if(_G.LFY.isMobile||_G.LFY.isIos)document.getElementById('uihelp').innerHTML =      'DRAG TO ROTATE & PINCH TO ZOOM';
-            this.resize();
-
-            _cb();
+            setTimeout(()=>{
+                this.setUiReady();
+                _cb();
+            },1000);
 
         });
 
+    }
+
+    //--------------------------------------------------------------------------------------
+    setUiReady(){
+        document.getElementById('loading').style.display =                                  'none';
+        document.getElementById('clicktostart').style.display =                             'block';
+        if(_G.LFY.isIos)document.getElementById('unmute_reminder_ios').style.display =      'none';
+        if(_G.LFY.isMobile||_G.LFY.isIos)document.getElementById('uihelp').innerHTML =      'DRAG TO ROTATE & PINCH TO ZOOM';
+        this.resize();
     }
 
     //--------------------------------------------------------------------------------------
@@ -608,11 +616,25 @@ class LostForYou{
         //this is a lot of TextureLoader instances 
         return new Promise((resolve,reject) => {
             new THREE.TextureLoader().load(frameDir,(_tex)=>{
-                resolve({sprite:sprite,texture:_tex});
+                setTimeout(()=>{
+                    resolve({sprite:sprite,texture:_tex});
+                },100);
             },undefined,(_error)=>{
                 reject(_error);
             });
         });
+    }
+
+    //--------------------------------------------------------------------------------------
+    spriteLoadCount(promise){
+        promise.then(()=>{
+            this.loadedSpriteCount++;
+            //console.log("sprite "+this.loadedSpriteCount+"/"+this.spritesToLoad);
+            //just a basic loading bar
+            var barWidth = window.innerWidth * (this.loadedSpriteCount/this.spritesToLoad);
+            document.getElementById('loading_bar').style.width = barWidth + 'px';
+        });
+        return promise;
     }
 
     //--------------------------------------------------------------------------------------
@@ -625,8 +647,10 @@ class LostForYou{
             for(var f=0;f<sprite.numIdleFrames;f++)promises.push(this.textureLoadPromise(sprite,'./assets/sprites/'+sprite.uid+'/idle/'+(f+1)+''+this.qualitySuffix+'.png'));
         }
 
+        this.spritesToLoad = promises.length;
+
         var startTimePromiseAll = Date.now();
-        Promise.all(promises)
+        Promise.all( promises.map(this.spriteLoadCount.bind(this)) )
             .then((returnedPromisesArray)=>{
                 var totalTimePromiseAll = Date.now()-startTimePromiseAll;
                 console.log("All textures loaded in "+totalTimePromiseAll+"ms");
